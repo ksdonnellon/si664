@@ -265,8 +265,9 @@ a:focus {
           border-radius: 500px;
 }
 
+/*changed margin to 0*/
 .row {
-  margin-left: -20px;
+  margin-left: 0px;
   *zoom: 1;
 }
 
