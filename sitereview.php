@@ -128,7 +128,7 @@ while ( $row = mysql_fetch_row($result) ) {
 ////////////// Displaying all the worksheets that are already present for the site
     
     echo("<h4>Worksheets Added for the Site</h4>");
-    //echo '<section id="tables"><table class="table table-bordered table-striped table-hover"><tbody>'."\n";
+    echo '<section id="tables"><table class="table table-bordered table-striped table-hover"><tbody>'."\n";
     $sitewsheets = mysql_query("SELECT id, site_id, community_name, worksheettype_id,score FROM Siteworksheets WHERE site_id ='$row[0]'");
     while ( $row1 = mysql_fetch_row($sitewsheets) ) {
         echo "<tr><td>";
