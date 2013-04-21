@@ -62,18 +62,14 @@ if ( isset($_POST['sitename']) && isset($_POST['parcelno']) && isset($_POST['acr
 <ul class="breadcrumb">
 <!--Should Home be login page? -->
         <li>Home<span class="divider">/</span></li>
-        <li class="active"><a href="addsite.php">Add New Site</a> <span class="divider">/</span></li>
- <!--Need URL-->       
-        <li class="#">Query</li>
+        <li class="active"><a href="addsite.php">Add New Site</a></li>
       </ul>
     </div>
 <div class="row">
 <h3>Add a New Site</h3>
-</div>
-<form class="form-horizontal well">
-<form method="post">
-   <fieldset>
-    <legend>Site Information</legend>
+    <form class="form-horizontal well" method="post">
+    <fieldset>
+        <legend>Site Information</legend>
 <p>Site Name:
 <input type="text" class="input-xlarge" name="sitename"></p>
 <p>Parcel Number:
@@ -92,5 +88,6 @@ if ( isset($_POST['sitename']) && isset($_POST['parcelno']) && isset($_POST['acr
 <button class="btn" a href="index.php">Cancel</a></button></p>
 </fieldset>
 </form>
+</div>
 </body>
 </html>
