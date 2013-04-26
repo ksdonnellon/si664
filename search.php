@@ -1,7 +1,7 @@
 <?php
 require_once "db.php";
 
-// Checking the Cookie Exists for the user login information
+/// Checking if the Cookie is available for this screen
 
 if(isset($_COOKIE['ID_my_site'])) 
 
@@ -41,31 +41,23 @@ if(isset($_COOKIE['ID_my_site']))
 
 /// End of Cookies Checker
 
-
 session_start();
 
-if ( isset($_POST['sitename']) && isset($_POST['parcelno']) && isset($_POST['acreage'])  
+if ( isset($_POST['sitename']) && isset($_POST['parcelno']) && isset($_POST['township'])  
      && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['zip'])) {
    $s = mysql_real_escape_string($_POST['sitename']);
    $p = mysql_real_escape_string($_POST['parcelno']);
-   $a = mysql_real_escape_string ($_POST['acreage']);
-   $ad = mysql_real_escape_string ($_POST['address']);
+   $ad = mysql_real_escape_string ($_POST['township']);
    $c = mysql_real_escape_string ($_POST['city']);
    $st = mysql_real_escape_string ($_POST['state']);
    $z = mysql_real_escape_string ($_POST['zip']); 
-   $sql = "INSERT INTO Siteinfo (site_name, parcel_no, acreage, address, city, state, zip) 
-              VALUES ('$s', '$p', '$a','$ad','$c','$st','$z')";
-   mysql_query($sql);
-   $site_id = mysql_insert_id();
-   $_SESSION['success'] = 'Site Added';
-   // $_SESSION['sitekey'] = $s;
-   header("Location:sitereview.php?sitekey=$site_id");
+   header("Location:searchresults.php?zip=$z") ;
    return;
-}
+}   
 ?>
 <html>
   <head>
-    <title>HRWC | Add a New Site </title>
+    <title>HRWC | Search </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
@@ -87,8 +79,8 @@ if ( isset($_POST['sitename']) && isset($_POST['parcelno']) && isset($_POST['acr
                         </a>
                 <div class="nav-collapse">
           <ul class="nav">
-            <li><a href="search.php">Search</a></li>
-            <li  class="active"><a href="addsite.php">Add New Site</a></li>
+            <li class="active"><a href="addsite.php">Search</a></li>
+            <li><a href="addsite.php">Add New Site</a></li>
             <li><a href="logout.php">Logout</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
@@ -103,30 +95,29 @@ if ( isset($_POST['sitename']) && isset($_POST['parcelno']) && isset($_POST['acr
     </div>
 <ul class="breadcrumb">
 <!--Should Home be login page? -->
-        <li class="active"><a href="addsite.php">Add New Site</a></li>
+        <li>Home<span class="divider">/</span></li>
+        <li class="active">Search</li>
       </ul>
     </div>
 <div class="row">
-<h3>Add a New Site</h3>
+<h3>Search</h3>
     <form class="form-horizontal well" method="post">
     <fieldset>
-        <legend>Site Information</legend>
+        <legend>Search</legend>
 <p>Site Name:
 <input type="text" class="input-xlarge" name="sitename"></p>
 <p>Parcel Number:
 <input type="text" class="input-xlarge" name="parcelno"></p>
-<p>Acreage:
-<input type="text" class="input-xlarge" name="acreage"></p>
-<p>Address:
-<input type="text" class="input-xlarge" name="address"></p>
+<p>Township:
+<input type="text" class="input-xlarge" name="township"></p>
 <p>City:
 <input type="text" class="input-xlarge" name="city"></p>
 <p>State:
 <input type="text" class="input-xlarge" name="state"></p>
 <p>Zip:
 <input type="text" class="input-xlarge" name="zip"></p>
-<p><button type="submit" input type="submit" class="btn btn-primary" value="Save">Submit</button>
-<button class="btn" a href="index.php">Cancel</a></button></p>
+<p><button type="submit" input type="submit" class="btn btn-primary" value="Save">Search</button>
+<a href="advancedsearch.php">Advanced Search</a></p>
 </fieldset>
 </form>
 </div>

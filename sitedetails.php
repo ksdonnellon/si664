@@ -1,7 +1,7 @@
 <?php
 require_once "db.php";
 
-// Checking the Cookie Exists for the user login information
+// Checking the cookie exists for the user login information
 
 if(isset($_COOKIE['ID_my_site'])) 
 
@@ -36,7 +36,7 @@ if(isset($_COOKIE['ID_my_site']))
  else 
  //if the cookie does not exist, they are taken to the login screen 
  {			 
- header("Location: login.php"); 
+ header("Location:login.php"); 
  } 
 
 /// End of Cookies Checker
@@ -52,12 +52,10 @@ if ( isset($_POST['siteid']) && isset($_POST['worksheettype']) && isset($_POST['
    $sql = "INSERT INTO Siteworksheets (community_name, site_id, worksheettype_id) 
               VALUES ('$a', '$s', '$p')";
    mysql_query($sql);
-   // Pulling the ID for the worksheet added 
-   $sws_id = mysql_insert_id();
    $_SESSION['wssuccess'] = 'Worksheet Added';
    //$_SESSION['siteUID'] = $s;
    //$_SESSION['sitekey'] = $s;
-   header("Location:addworksheet.php?swsid=$sws_id&wstypeid=$p&siteuid=$s") ;
+   header("Location: sitedetails.php?id=$s") ;
    return;
 }
  
@@ -89,8 +87,11 @@ if ( isset($_POST['siteid']) && isset($_POST['worksheettype']) && isset($_POST['
                 <div class="nav-collapse">
           <ul class="nav">
             <li><a href="search.php">Search</a></li>
-            <li class ="active"><a href="addsite.php">Add New Site</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="addsite.php">Add New Site</a></li>
+            <!--Need URL -->
+            
+            <!--Need URL-->
+            <li><a href="logout.php">Log Out</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div>
@@ -105,7 +106,7 @@ if ( isset($_POST['siteid']) && isset($_POST['worksheettype']) && isset($_POST['
 <ul class="breadcrumb">
 <!--Should Home be login page? -->
         <li>Home<span class="divider">/</span></li>
-        <li><a href="addsite.php">Add New Site</a><span class="divider">/</span></li>     
+        <li><a href="search.php">Search</a><span class="divider">/</span></li>     
         <li class="active">Site Details</li>
       </ul>
     </div>
@@ -158,9 +159,9 @@ if ( isset($_SESSION['wssuccess']) ) {
 }
 
 echo ('<h2> Site Details </h2>'."\n");
-$site_key = mysql_real_escape_string($_GET['sitekey']);
+$site_id = mysql_real_escape_string($_GET['id']);
 //echo ("<p>$site_key</p>");
-$result = mysql_query("SELECT id, site_name FROM Siteinfo WHERE id = '$site_key'");
+$result = mysql_query("SELECT id, site_name FROM Siteinfo WHERE id = '$site_id'");
 $wsheets = mysql_query("SELECT * FROM Worksheettypes");
 while ( $row = mysql_fetch_row($result) ) {
     echo("<h4>Site Name: <b>$row[1]</b></h4>");
@@ -188,7 +189,7 @@ while ( $row = mysql_fetch_row($result) ) {
         //echo("</td><td>\n");
         echo(htmlentities($row1[4]));
         echo("</td><td>\n");
-        echo('<a href="editworksheet.php?swsid='.htmlentities($row1[0]).'&wstypeid='.htmlentities($row1[3]).'&siteuid='.htmlentities($row1[1]).'">Enter Details</a> / ');
+        echo('<a href="addworksheet.php?swsid='.htmlentities($row1[0]).'&wstypeid='.htmlentities($row1[3]).'&siteuid='.htmlentities($row1[1]).'">Enter Details</a> / ');
         echo('<a href="viewworksheet.php?swsid='.htmlentities($row1[0]).'&wstypeid='.htmlentities($row1[3]).'&siteuid='.htmlentities($row1[1]).'">View Worksheet</a>');
         echo("</td></tr>\n");
 }

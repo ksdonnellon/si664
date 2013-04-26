@@ -1,3 +1,75 @@
+<?php
+require_once "db.php";
+
+// Checking the Cookie Exists for the user login information
+
+if(isset($_COOKIE['ID_my_site'])) 
+
+ { 
+
+ 	$username = $_COOKIE['ID_my_site']; 
+
+ 	$pass = $_COOKIE['Key_my_site']; 
+
+ 	 	$check = mysql_query("SELECT * FROM Loginusers WHERE username = '$username'")or die(mysql_error()); 
+
+ 	while($info = mysql_fetch_array($check)) 	 
+
+ 		{ 
+
+ //if the cookie has the wrong password, they are taken to the login page 
+
+ 		if ($pass != $info['password']) {
+ 		 		header("Location: login.php"); 
+ 			} 
+
+ //otherwise they are shown the admin area	 
+ 	else 
+			{   
+ //echo "<a href=logout.php>Logout</a>"; 
+ 			} 
+
+ 		} 
+
+ 		} 
+
+ else 
+ //if the cookie does not exist, they are taken to the login screen 
+ {			 
+ header("Location: login.php"); 
+ } 
+
+/// End of Cookies Checker
+
+
+session_start();
+
+// Post Action - What happens when the User clicks save button 
+
+$siteuid = mysql_real_escape_string($_GET['siteuid']);
+
+// The site worksheet id for saving into the databse - Siteanswers table
+$swsid = mysql_real_escape_string($_GET['swsid']);
+$wstypeid = mysql_real_escape_string($_GET['wstypeid']);
+
+if (isset($_POST['wsoptions'])) {
+    $sm = array();
+    // Loop for getting the values from the POST array and saving into a different array
+   for ($q=0; $q < count($_POST['wsoptions']); $q++){ 
+   $sm[$q] = mysql_real_escape_string($_POST['wsoptions'][$q]);
+   // echo $sm[$q]. ", ";
+   $sql = "INSERT INTO Siteanswers (site_id, siteworksheet_id, options_id) 
+              VALUES ('$siteuid','$swsid','$sm[$q]')";
+   mysql_query($sql);
+   }
+     
+   /////////////// LOOP ENDS///////////////////////////
+   
+   // $_SESSION['wsupdate'] = 'Worksheet Updated';
+   header( "Location: sitereview.php?sitekey=$siteuid") ;
+   return;
+}
+?>
 <html>
   <head>
     <title>HRWC | Add Site Worksheet </title>
@@ -22,12 +94,11 @@
                         </a>
                 <div class="nav-collapse">
           <ul class="nav">
-            <li><a href="#">Home</a></li>
+            <li><a href="search.php">Search</a></li>
             <li><a href="addsite.php">Add New Site</a></li>
             <!--Need URL -->
-            <li><a href="#">Query</a></li>
+            <li><a href="logout.php">Logout</a></li>
             <!--Need URL-->
-            <li><a href="#">Log Out</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div>
@@ -41,45 +112,18 @@
     </div>
 <ul class="breadcrumb">
 <!--Should Home be login page? -->
-        <li>Home<span class="divider">/</span></li>
         <li><a href="addsite.php">Add New Site</a> <span class="divider">/</span></li>     
-        <li><a href="sitereview.php">Site Details <span class="divider">/</span></li>
-        <li class="active"><a href="addworksheet.php">Add Worksheet</a></li>
+        <li><a href="sitereview.php">Site Details</a><span class="divider">/</span></li>
+        <li class="active">Add Worksheet</li>
       </ul>
     </div>
+    </body>
+    </html>
+
+
 <?php
-require_once "db.php";
-session_start();
-
-// Post Action - What happens when the User clicks save button 
-
-$siteuid = mysql_real_escape_string($_GET['siteuid']);
-
-// The site worksheet id for saving into the databse - Siteanswers table
-$swsid = mysql_real_escape_string($_GET['swsid']);
-$wstypeid = mysql_real_escape_string($_GET['wstypeid']);
-
-if (isset($_POST['wsoptions'])) {
-    $sm = array();
-    // Loop for getting the values from the POST array and saving into a different array
-   for ($q=0; $q < count($_POST['wsoptions']); $q++){ 
-   $sm[$q] = mysql_real_escape_string($_POST['wsoptions'][$q]);
-   // echo $sm[$q]. ", ";
-   $sql = "INSERT INTO Siteanswers (site_id, siteworksheet_id, options_id) 
-              VALUES ('$siteuid','$swsid','$sm[$q]')";
-   mysql_query($sql);
-   }
-   
-   
-   /////////////// LOOP ENDS///////////////////////////
-   
-   $_SESSION['wsupdate'] = 'Worksheet Updated';
-   header( 'Location: sitereview.php') ;
-   return;
-}
-
 ///// ERROR VARIABLES FOR THE SESSIONS - should be used in case of session variables
-
+session_start();
 if ( isset($_SESSION['error']) ) {
     echo '<div class="row">
     <div class="span4">
@@ -141,7 +185,7 @@ WHERE question_id ='$row[0]'");
     // WORST LINE EVER echo("</p>\n");
     }
 }
-echo "<p><input type = 'submit' Value = 'Submit'>";
-echo "<a href='sitereview.php'>Cancel</a></p>";
+echo "<button type='submit' input type='submit' class='btn btn-primary' value='Save'>Submit</button>";
+echo "<button class='btn' a href='sitereview.php'>Cancel</a></button></p>";
 echo "</form>";
 ?>
